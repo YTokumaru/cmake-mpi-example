@@ -1,0 +1,99 @@
+name: build(Windows)
+on:
+  pull_request:
+  release:
+    types: [published]
+  push:
+    tags:
+    branches:
+      - main
+      - develop
+
+jobs:
+  Test:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+
+      # Recommendations:
+      #   * support at least 2 operating systems
+      #   * support at least 2 compilers
+      #   * make sure all supported configurations for your project are built
+      #
+      # Disable/enable builds in this list to meet the above recommendations
+      # and your own projects needs
+      matrix:
+        preset:
+          - windows-msvc-debug
+          - windows-msvc-release
+          - windows-clang-debug
+          - windows-clang-release
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      # TODO: Add caching with presets
+      # - name: Setup Cache
+      #   uses: ./.github/actions/setup_cache
+      #   with:
+      #     compiler: ${{ matrix.compiler }}
+      #     build_type: ${{ matrix.build_type }}
+      #     packaging_maintainer_mode: ${{ matrix.packaging_maintainer_mode }}
+      #     generator: ${{ matrix.generator }}
+
+      - name: Get project name
+        uses: cardinalby/export-env-action@v2
+        with:
+          envFile: ".github/constants.env"
+
+      - name: Install dependencies
+        run: |
+          choco install ccache
+          choco install cppcheck
+          choco install vswhere
+          choco install opencppcoverage
+          Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
+          refreshenv
+        shell: powershell
+
+      - name: Configure CMake
+        run: |
+          Import-Module $(vswhere -latest -products * -find **/Common7/Tools/Microsoft.VisualStudio.DevShell.dll)
+          Enter-VsDevShell $(vswhere -latest -property instanceId) -SkipAutomaticLocation -DevCmdArguments '-arch=x64 -host_arch=x64'
+          cmake -S . --preset ${{matrix.preset}} -DGIT_SHA:STRING=${{ github.sha }}
+        shell: powershell
+
+      - name: Build
+        # Execute the build.
+        run: |
+          Import-Module $(vswhere -latest -products * -find **/Common7/Tools/Microsoft.VisualStudio.DevShell.dll)
+          Enter-VsDevShell $(vswhere -latest -property instanceId) -SkipAutomaticLocation -DevCmdArguments '-arch=x64 -host_arch=x64'
+          cmake --build --preset build-${{matrix.preset}}
+        shell: powershell
+
+      - name: Test
+        if: ${{ !contains(matrix.preset, 'debug') }}
+        run: |
+          Import-Module $(vswhere -latest -products * -find **/Common7/Tools/Microsoft.VisualStudio.DevShell.dll)
+          Enter-VsDevShell $(vswhere -latest -property instanceId) -SkipAutomaticLocation -DevCmdArguments '-arch=x64 -host_arch=x64'
+          ctest --preset test-${{matrix.preset}}
+        shell: powershell
+
+      - name: Test & Coverage
+        if: ${{ contains(matrix.preset, 'debug') }}
+        run: |
+          Import-Module $(vswhere -latest -products * -find **/Common7/Tools/Microsoft.VisualStudio.DevShell.dll)
+          Enter-VsDevShell $(vswhere -latest -property instanceId) -SkipAutomaticLocation -DevCmdArguments '-arch=x64 -host_arch=x64'
+          & "C:\Program Files\OpenCppCoverage\OpenCppCoverage.exe" --export_type cobertura:coverage.xml --cover_children --sources ${{ github.workspace }}\src --sources ${{ github.workspace }}\include -- ctest.exe --preset test-${{matrix.preset}}
+        shell: powershell
+
+      - name: Publish to codecov
+        uses: codecov/codecov-action@v4
+        if: ${{ contains(matrix.preset, 'debug') }}
+        with:
+          flags: ${{ runner.os }}
+          name: ${{ runner.os }}-coverage
+          files: ./coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true

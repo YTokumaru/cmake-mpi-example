@@ -1,4 +1,4 @@
-function(myproject_enable_coverage project_name)
+function(cmake_mpi_example_enable_coverage project_name)
  if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
     message(WARNING "Coverage is only available in Debug mode")
     return()

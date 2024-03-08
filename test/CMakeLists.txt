@@ -7,9 +7,9 @@ project(CmakeConfigPackageTests LANGUAGES CXX)
 if(PROJECT_IS_TOP_LEVEL OR TEST_INSTALLED_VERSION)
   enable_testing()
 
-  find_package(myproject CONFIG REQUIRED) # for intro, project_options, ...
+  find_package(cmake_mpi_example CONFIG REQUIRED) # for intro, project_options, ...
 
-  if(NOT TARGET myproject_options)
+  if(NOT TARGET cmake_mpi_example_options)
     message(FATAL_ERROR "Requiered config package not found!")
     return() # be strictly paranoid for Template Janitor github action! CK
   endif()
@@ -33,9 +33,9 @@ add_executable(tests tests.cpp)
 target_link_libraries(
   tests
   PRIVATE 
-          myproject::myproject_warnings
-          myproject::myproject_options
-          myproject::sample_library)
+          cmake_mpi_example::cmake_mpi_example_warnings
+          cmake_mpi_example::cmake_mpi_example_options
+          cmake_mpi_example::sample_library)
 target_link_system_libraries(tests PRIVATE Catch2::Catch2WithMain)
 # Cppcheck and clang-tidy are disabled for tests
 set_target_properties(tests PROPERTIES CXX_CPPCHECK "")
@@ -69,9 +69,9 @@ add_executable(constexpr_tests constexpr_tests.cpp)
 target_link_libraries(
   constexpr_tests
   PRIVATE 
-          myproject::myproject_warnings
-          myproject::myproject_options
-          myproject::sample_library)
+          cmake_mpi_example::cmake_mpi_example_warnings
+          cmake_mpi_example::cmake_mpi_example_options
+          cmake_mpi_example::sample_library)
 target_link_system_libraries(constexpr_tests PRIVATE Catch2::Catch2WithMain)
 set_target_properties(constexpr_tests PROPERTIES CXX_CPPCHECK "")
 set_target_properties(constexpr_tests PROPERTIES CXX_CLANG_TIDY "")
@@ -94,9 +94,9 @@ catch_discover_tests(
 add_executable(relaxed_constexpr_tests constexpr_tests.cpp)
 target_link_libraries(
   relaxed_constexpr_tests
-  PRIVATE myproject::myproject_warnings
-          myproject::myproject_options
-          myproject::sample_library)
+  PRIVATE cmake_mpi_example::cmake_mpi_example_warnings
+          cmake_mpi_example::cmake_mpi_example_options
+          cmake_mpi_example::sample_library)
 target_link_system_libraries(relaxed_constexpr_tests PRIVATE Catch2::Catch2WithMain)
 target_compile_definitions(relaxed_constexpr_tests PRIVATE -DCATCH_CONFIG_RUNTIME_STATIC_REQUIRE)
 set_target_properties(relaxed_constexpr_tests PROPERTIES CXX_CPPCHECK "")

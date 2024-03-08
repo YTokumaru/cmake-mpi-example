@@ -58,9 +58,9 @@
       "cacheVariables": {
         "CMAKE_C_COMPILER": "clang-cl",
         "CMAKE_CXX_COMPILER": "clang-cl",
-        "myproject_ENABLE_IPO": false,
+        "cmake_mpi_example_ENABLE_IPO": false,
         "CMAKE_BUILD_TYPE": "Debug",
-        "myproject_ENABLE_COVERAGE": "True"
+        "cmake_mpi_example_ENABLE_COVERAGE": "True"
       }
     },
     {
@@ -72,7 +72,7 @@
       "cacheVariables": {
         "CMAKE_C_COMPILER": "clang-cl",
         "CMAKE_CXX_COMPILER": "clang-cl",
-        "myproject_ENABLE_IPO": false,
+        "cmake_mpi_example_ENABLE_IPO": false,
         "CMAKE_BUILD_TYPE": "Release"
       }
     },
@@ -86,7 +86,7 @@
         "CMAKE_C_COMPILER": "clang-cl",
         "CMAKE_CXX_COMPILER": "clang-cl",
         "CMAKE_BUILD_TYPE": "Debug",
-        "myproject_ENABLE_COVERAGE": "True"
+        "cmake_mpi_example_ENABLE_COVERAGE": "True"
       },
       "vendor": {
         "microsoft.com/VisualStudioSettings/CMake/1.0": {
@@ -121,7 +121,7 @@
         "CMAKE_C_COMPILER": "gcc",
         "CMAKE_CXX_COMPILER": "g++",
         "CMAKE_BUILD_TYPE": "Debug",
-        "myproject_ENABLE_COVERAGE": "True"
+        "cmake_mpi_example_ENABLE_COVERAGE": "True"
       }
     },
     {
@@ -146,7 +146,7 @@
         "CMAKE_C_COMPILER": "clang",
         "CMAKE_CXX_COMPILER": "clang++",
         "CMAKE_BUILD_TYPE": "Debug",
-        "myproject_ENABLE_COVERAGE": "True"
+        "cmake_mpi_example_ENABLE_COVERAGE": "True"
       }
     },
     {

@@ -72,10 +72,10 @@ jobs:
               C:\Program Files (x86)\Intel\oneAPI\setvars-vcvarsall.bat
               C:\Program Files (x86)\Intel\oneAPI\compiler
           key: install-${{ env.CACHE_NUMBER }}-${{ env.WINDOWS_HPCKIT_URL }}-${{ env.WINDOWS_CPP_COMPONENTS }}-compiler-${{ hashFiles('**/.github/scripts/cache_exclude_windows.sh') }}
+      
       - name: install
         if: steps.cache-install.outputs.cache-hit != 'true'
-        run: .github/scripts/install_windows.bat $WINDOWS_HPCKIT_URL $WINDOWS_CPP_COMPONENTS
-        
+        run: .github/scripts/install_windows.bat ${{ env.WINDOWS_HPCKIT_URL }} ${{ env.WINDOWS_CPP_COMPONENTS }}
 
       - name: Configure CMake
         run: |

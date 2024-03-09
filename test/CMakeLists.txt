@@ -152,4 +152,4 @@ target_link_system_libraries(
   Catch2::Catch2WithMain)
 set_target_properties(parallel_integrate_tests PROPERTIES CXX_CPPCHECK "")
 set_target_properties(parallel_integrate_tests PROPERTIES CXX_CLANG_TIDY "")
-add_test(NAME parallel_integrate_tests COMMAND mpiexec -n 16 $<TARGET_FILE:parallel_integrate_tests>)
+add_test(NAME parallel_integrate_tests COMMAND mpiexec -n 4 $<TARGET_FILE:parallel_integrate_tests>)

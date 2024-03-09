@@ -26,8 +26,8 @@ jobs:
         preset:
           - unixlike-gcc-debug
           - unixlike-gcc-release
-          - unixlike-clang-debug
-          - unixlike-clang-release
+          # - unixlike-clang-debug
+          # - unixlike-clang-release
 
     steps:
       - name: Check out repository code

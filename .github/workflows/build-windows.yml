@@ -79,32 +79,28 @@ jobs:
 
       - name: Configure CMake
         run: |
-          Import-Module $(vswhere -latest -products * -find **/Common7/Tools/Microsoft.VisualStudio.DevShell.dll)
-          Enter-VsDevShell $(vswhere -latest -property instanceId) -SkipAutomaticLocation -DevCmdArguments '-arch=x64 -host_arch=x64'
+          cmd.exe "/K" '"C:\Program Files (x86)\Intel\oneAPI\setvars.bat" && powershell'
           cmake -S . --preset ${{matrix.preset}} -DGIT_SHA:STRING=${{ github.sha }}
         shell: powershell
 
       - name: Build
         # Execute the build.
         run: |
-          Import-Module $(vswhere -latest -products * -find **/Common7/Tools/Microsoft.VisualStudio.DevShell.dll)
-          Enter-VsDevShell $(vswhere -latest -property instanceId) -SkipAutomaticLocation -DevCmdArguments '-arch=x64 -host_arch=x64'
+          cmd.exe "/K" '"C:\Program Files (x86)\Intel\oneAPI\setvars.bat" && powershell'
           cmake --build --preset build-${{matrix.preset}}
         shell: powershell
 
       - name: Test
         if: ${{ !contains(matrix.preset, 'debug') }}
         run: |
-          Import-Module $(vswhere -latest -products * -find **/Common7/Tools/Microsoft.VisualStudio.DevShell.dll)
-          Enter-VsDevShell $(vswhere -latest -property instanceId) -SkipAutomaticLocation -DevCmdArguments '-arch=x64 -host_arch=x64'
+          cmd.exe "/K" '"C:\Program Files (x86)\Intel\oneAPI\setvars.bat" && powershell'
           ctest --preset test-${{matrix.preset}}
         shell: powershell
 
       - name: Test & Coverage
         if: ${{ contains(matrix.preset, 'debug') }}
         run: |
-          Import-Module $(vswhere -latest -products * -find **/Common7/Tools/Microsoft.VisualStudio.DevShell.dll)
-          Enter-VsDevShell $(vswhere -latest -property instanceId) -SkipAutomaticLocation -DevCmdArguments '-arch=x64 -host_arch=x64'
+          cmd.exe "/K" '"C:\Program Files (x86)\Intel\oneAPI\setvars.bat" && powershell'
           & "C:\Program Files\OpenCppCoverage\OpenCppCoverage.exe" --export_type cobertura:coverage.xml --cover_children --sources ${{ github.workspace }}\src --sources ${{ github.workspace }}\include -- ctest.exe --preset test-${{matrix.preset}}
         shell: powershell
 

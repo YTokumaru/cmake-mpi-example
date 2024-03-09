@@ -1,9 +1,10 @@
 #include <serial_integrate.hpp>
+#include <functional>
 
-double serial::integrate(std::function<double(double)> f, double a, double b, int n)
+double serial::integrate(const std::function<double(double)> &func, double start, double end, int num)
 {
-  double h = (b - a) / n;
-  double sum = 0.5 * (f(a) + f(b));
-  for (int i = 1; i < n; ++i) { sum += f(a + i * h); }
-  return sum * h;
+  const double delta = (end - start) / num;
+  double sum = 0.5 * (func(start) + func(end));     // NOLINT(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
+  for (int i = 1; i < num; ++i) { sum += func(start + i * delta); }
+  return sum * delta;
 }

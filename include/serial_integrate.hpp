@@ -13,7 +13,7 @@ namespace serial {
  * @param n The number of trapezoids to use
  * @return double
  */
-double integrate(std::function<double(double)> f, double a, double b, int n);
+double integrate(const std::function<double(double)> &func, double start, double end, int num);
 }// namespace serial
 
 #endif// SERIAL_INTEGRATE_HPP

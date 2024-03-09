@@ -114,3 +114,26 @@ catch_discover_tests(
   "relaxed_constexpr."
   OUTPUT_SUFFIX
   .xml)
+
+add_executable(serial_integrate_tests serial_integrate_tests.cpp)
+target_link_libraries(
+  serial_integrate_tests
+  PRIVATE 
+          cmake_mpi_example::cmake_mpi_example_warnings
+          cmake_mpi_example::cmake_mpi_example_options
+          cmake_mpi_example::serial_integrate)
+target_link_system_libraries(serial_integrate_tests PRIVATE Catch2::Catch2WithMain)
+set_target_properties(serial_integrate_tests PROPERTIES CXX_CPPCHECK "")
+set_target_properties(serial_integrate_tests PROPERTIES CXX_CLANG_TIDY "")
+catch_discover_tests(
+  serial_integrate_tests
+  TEST_PREFIX
+  "serial_integrate."
+  REPORTER
+  XML
+  OUTPUT_DIR
+  .
+  OUTPUT_PREFIX
+  "serial_integrate."
+  OUTPUT_SUFFIX
+  .xml)

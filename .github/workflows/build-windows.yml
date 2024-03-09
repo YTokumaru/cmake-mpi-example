@@ -13,9 +13,8 @@ env:
   WINDOWS_BASEKIT_URL: https://registrationcenter-download.intel.com/akdlm/IRC_NAS/62641e01-1e8d-4ace-91d6-ae03f7f8a71f/w_BaseKit_p_2024.0.0.49563_offline.exe
   WINDOWS_HPCKIT_URL: https://registrationcenter-download.intel.com/akdlm/IRC_NAS/5b36181e-4974-4733-91c7-0c10c54900a5/w_HPCKit_p_2024.0.0.49588_offline.exe
   CACHE_NUMBER: 6
-  WINDOWS_CPP_COMPONENTS: intel.oneapi.win.cpp-dpcpp-common
-  WINDOWS_FORTRAN_COMPONENTS: intel.oneapi.win.ifort-compiler
-  WINDOWS_DPCPP_COMPONENTS: intel.oneapi.win.cpp-dpcpp-common
+  WINDOWS_MPI_COMPONENTS: intel.oneapi.win.mpi.devel
+
 jobs:
   Test:
     runs-on: windows-latest
@@ -71,11 +70,11 @@ jobs:
           path: |
               C:\Program Files (x86)\Intel\oneAPI\setvars-vcvarsall.bat
               C:\Program Files (x86)\Intel\oneAPI\compiler
-          key: install-${{ env.CACHE_NUMBER }}-${{ env.WINDOWS_HPCKIT_URL }}-${{ env.WINDOWS_CPP_COMPONENTS }}-compiler-${{ hashFiles('**/.github/scripts/cache_exclude_windows.sh') }}
+          key: install-${{ env.CACHE_NUMBER }}-${{ env.WINDOWS_HPCKIT_URL }}-${{ env.WINDOWS_MPI_COMPONENTS }}-compiler-${{ hashFiles('**/.github/scripts/cache_exclude_windows.sh') }}
       
       - name: install
         if: steps.cache-install.outputs.cache-hit != 'true'
-        run: .github/scripts/install_windows.bat ${{ env.WINDOWS_HPCKIT_URL }} ${{ env.WINDOWS_CPP_COMPONENTS }}
+        run: .github/scripts/install_windows.bat ${{ env.WINDOWS_HPCKIT_URL }} ${{ env.WINDOWS_MPI_COMPONENTS }}
 
       - name: Configure CMake
         run: |

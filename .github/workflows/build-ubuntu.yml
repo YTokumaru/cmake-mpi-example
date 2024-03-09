@@ -73,6 +73,11 @@ jobs:
           clangtidy: true
           gcovr: true
 
+      - name: Install MPICH
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mpich
+
       - name: Configure CMake
         run: |
           cmake --preset ${{matrix.preset}}

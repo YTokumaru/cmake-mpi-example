@@ -47,6 +47,7 @@ jobs:
           brew install cppcheck
           brew install ccache
           brew install ninja
+          brew install mpich
 
       - name: Get project name
         uses: cardinalby/export-env-action@v2
